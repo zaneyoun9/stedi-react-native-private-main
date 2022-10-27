@@ -16,32 +16,78 @@ import Home from "./screens/Home";
 import { NavigationContainer } from "@react-navigation/native";
 
 const AppStack = createNativeStackNavigator();
+const loggedInStates = {
+  NOT_LOGGED_IN: "NOT_LOGGED_IN",
+  LOGGED_IN: "LOGGED_IN",
+  CODE_SENT: "CODE_SENT",
+};
 
 const App = () => {
   const [isFirstLaunch, setFirstLaunch] = React.useState(true);
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [loggedInState, setloggedInState] = React.useState(
+    loggedInStates.NOT_LOGGED_IN
+  );
   const [homeTodayScore, setHomeTodayScore] = React.useState(0);
+  const [phoneNumber, setPhoneNumber] = React.useState("");
+  const [oneTimePassword, setOneTimePassword] = React.useState(null);
 
   if (isFirstLaunch == true) {
     return <OnboardingScreen setFirstLaunch={setFirstLaunch} />;
-  } else if (isLoggedIn) {
+  } else if (loggedInState == loggedInStates.LOGGED_IN) {
     return <Navigation />;
-  } else {
+  } else if (loggedInState == loggedInStates.NOT_LOGGED_IN) {
     return (
-      <view>
+      <View>
         <TextInput
-          style={StyleSheet.input}
+          style={styles.input}
           placeholderTextColor="#4251f5"
           placeholder="Phone Number"
+          value={phoneNumber}
+          onChangeText={setPhoneNumber}
         ></TextInput>
         <Button
           title="Send"
           style={styles.button}
-          onPress={() => {
+          onPress={async () => {
             console.log("Button was pressed!");
+            await fetch("https://dev.stedi.me/twofactorlogin/" + phoneNumber, {
+              method: "POST",
+              headers: {
+                "content-type": "application/text",
+              },
+            });
+            setloggedInState(loggedInStates == loggedInStates.CODE_SENT);
           }}
         />
-      </view>
+      </View>
+    );
+  } else if (loggedInState == loggedInStates.CODE_SENT) {
+    return (
+      <View>
+        <TextInput
+          style={styles.input}
+          placeholderTextColor="#4251f5"
+          placeholder="Phone Number"
+          value={phoneNumber}
+          onChangeText={setPhoneNumber}
+          keyboardType="numeric"
+        ></TextInput>{" "}
+        <Button
+          title="Login"
+          style={styles.button}
+          onPress={async () => {
+            console.log("Login Button was pressed!");
+            await fetch("https://dev.stedi.me/twofactorlogin", {
+              method: "POST",
+              headers: {
+                "content-type": "application/text",
+              },
+              body:
+            });
+            setloggedInState(loggedInStates == loggedInStates.CODE_SENT);
+          }}
+        />
+      </View>
     );
   }
 };
