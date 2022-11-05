@@ -77,13 +77,24 @@ const App = () => {
           style={styles.button}
           onPress={async () => {
             console.log("Login Button was pressed!");
-            await fetch("https://dev.stedi.me/twofactorlogin", {
-              method: "POST",
-              headers: {
-                "content-type": "application/text",
-              },
-              body:
-            });
+            const loginResponse = await fetch(
+              "https://dev.stedi.me/twofactorlogin",
+              {
+                method: "POST",
+                headers: {
+                  "content-type": "application/text",
+                },
+                body: JSON.stringify({
+                  phoneNumber: phoneNumber,
+                  oneTimePassword: oneTimePassword,
+                }),
+              }
+            );
+            if (loginResponse.status == 200) {
+              setloginState(loggedInStates.LOGGED_IN);
+            } else {
+              setloginState(loggedInStates.NOT_LOGGED_IN);
+            }
             setloggedInState(loggedInStates == loggedInStates.CODE_SENT);
           }}
         />
