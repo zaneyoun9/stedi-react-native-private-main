@@ -32,6 +32,7 @@ const App = () => {
   const [homeTodayScore, setHomeTodayScore] = React.useState(0);
   const [phoneNumber, setPhoneNumber] = React.useState("");
   const [oneTimePassword, setOneTimePassword] = React.useState(null);
+
   useEffect(() => {
     const getSessionToken = async () => {
       const sessionToken = await AsyncStorage.getItem("sessionToken");
