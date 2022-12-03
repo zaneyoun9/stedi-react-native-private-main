@@ -5,7 +5,6 @@ import {
   View,
   Image,
   TouchableOpacity,
-  AsyncStorage,
   TextInput,
   Button,
   Alert,
@@ -26,7 +25,7 @@ const loggedInStates = {
 
 const App = () => {
   const [isFirstLaunch, setFirstLaunch] = React.useState(true);
-  const [loggedInState, setloggedInState] = React.useState(
+  const [loggedInState, setLoggedInState] = React.useState(
     loggedInStates.NOT_LOGGED_IN
   );
   const [homeTodayScore, setHomeTodayScore] = React.useState(0);
@@ -49,7 +48,7 @@ const App = () => {
       if (validateResponse.status == 200) {
         const userName = await validateResponse.text();
         await AsyncStorage.setItem("userName", userName);
-        setloggedInState(loggedInStates.LOGGED_IN);
+        setLoggedInState(loggedInStates.LOGGED_IN);
       }
     };
     getSessionToken();
@@ -80,7 +79,7 @@ const App = () => {
                 "content-type": "application/text",
               },
             });
-            setloggedInState(loggedInStates == loggedInStates.CODE_SENT);
+            setLoggedInState(loggedInStates.CODE_SENT);
           }}
         />
       </View>
@@ -91,9 +90,9 @@ const App = () => {
         <TextInput
           style={styles.input}
           placeholderTextColor="#4251f5"
-          placeholder="Phone Number"
-          value={phoneNumber}
-          onChangeText={setPhoneNumber}
+          placeholder="One Time Password"
+          value={oneTimePassword}
+          onChangeText={setOneTimePassword}
           keyboardType="numeric"
         ></TextInput>{" "}
         <Button
@@ -116,14 +115,14 @@ const App = () => {
             );
             if (loginResponse.status == 200) {
               const sessionToken = await loginResponse.text();
+              console.log('sessionToken in  Login Button', sessionToken);
               await AsyncStorage.setItem("sessionToken", sessionToken);
-              setloginState(loggedInStates.LOGGED_IN);
+              setLoggedInState(loggedInStates.LOGGED_IN);
             } else {
               console.log("response status", loginResponse.status);
               Alert.alert("Invalid", "Invalid login Information");
-              setloginState(loggedInStates.NOT_LOGGED_IN);
+              setLoggedInState(loggedInStates.NOT_LOGGED_IN);
             }
-            setloggedInState(loggedInStates == loggedInStates.CODE_SENT);
           }}
         />
       </View>

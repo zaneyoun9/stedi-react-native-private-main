@@ -50,7 +50,8 @@
     "react-native-web": "0.17.7",
     "react-navigation": "^4.4.4",
     "timer": "^1.0.1",
-    "yarn": "^1.22.11"
+    "yarn": "^1.22.11",
+    "expo-camera": "~12.2.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0"
