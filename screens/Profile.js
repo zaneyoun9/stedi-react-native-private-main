@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -33,6 +33,7 @@ const Profile = (props) => {
   const [userName, setUserName] = useState("");
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [cameraReady, setCameraReady] = useState(false);
+  const cameraRef = useRef(null);
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -63,15 +64,15 @@ const Profile = (props) => {
       exif: false,
     };
     return (
-      <view style={styles.container}>
-        <camera
+      <View style={styles.container}>
+        <Camera
           style={styles.camera}
           ref={cameraRef}
           onCameraReady={() => {
             setCameraReady(true);
           }}
         >
-          <view style={styles.buttonContainer}>
+          <View style={styles.buttonContainer}>
             {cameraReady ? (
               <TouchableOpacity
                 style={styles.button}
@@ -87,9 +88,9 @@ const Profile = (props) => {
                 <Text style={styles.text}>Take Picture</Text>
               </TouchableOpacity>
             ) : null}
-          </view>
-        </camera>
-      </view>
+          </View>
+        </Camera>
+      </View>
     );
   } else {
     return (
@@ -114,12 +115,12 @@ const Profile = (props) => {
           <CardContent>
             <Image
               style={{ height: 100, width: 100, borderRadius: 75 }}
-              source={require("../image/me.jpg")}
+              source={{ uri: profilePhoto }}
             />
             <Text
               style={{ marginTop: 10, marginBottom: 10, fontWeight: "bold" }}
             >
-              Sarah Romero
+              {userName}
             </Text>
 
             <Text style={{ marginTop: 20, marginBottom: 2 }}>
@@ -139,6 +140,26 @@ export default Profile;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "center",
     padding: 20,
+  },
+  camera: {
+    flex: 1,
+  },
+  buttonContainer: {
+    flex: 1,
+    flexDirection: "row",
+    backgroundColor: "transparent",
+    margin: 64,
+  },
+  button: {
+    flex: 1,
+    alignSelf: "flex-end",
+    alignItems: "center",
+  },
+  text: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "white",
   },
 });

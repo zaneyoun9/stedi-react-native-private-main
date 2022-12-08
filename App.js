@@ -94,7 +94,7 @@ const App = () => {
           value={oneTimePassword}
           onChangeText={setOneTimePassword}
           keyboardType="numeric"
-        ></TextInput>{" "}
+        ></TextInput>
         <Button
           title="Login"
           style={styles.button}
@@ -115,7 +115,7 @@ const App = () => {
             );
             if (loginResponse.status == 200) {
               const sessionToken = await loginResponse.text();
-              console.log('sessionToken in  Login Button', sessionToken);
+              console.log("sessionToken in  Login Button", sessionToken);
               await AsyncStorage.setItem("sessionToken", sessionToken);
               setLoggedInState(loggedInStates.LOGGED_IN);
             } else {

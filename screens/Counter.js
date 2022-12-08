@@ -43,6 +43,15 @@ export default function Counter(props) {
   const [score, setScore] = useState(0);
 
   const [currentScreen, setCurrentScreen] = useState("counter");
+  useEffect(()=>{
+    const getUserName = async ()=>{
+      userName.current= await AsyncStorage.getItem('userName');
+      console.log('Counter userName',userName.current);    
+      token.current = await AsyncStorage.getItem('sessionToken');
+     console.log('counter token:' ,token.current);
+    };
+    getUserName();
+  },[]);
   useEffect(() => {
     if (currentScreen == "counter") {
       if (completionCount == 1) {
@@ -90,7 +99,7 @@ export default function Counter(props) {
   const stopTime = useRef(0);
   const testTime = useRef(0);
   const token = useRef("");
-  const userName = useRef;
+  const userName = useRef();
 
   const savingSteps = async (event) => {
     //how to get startime, stepPoints, StopTime, TestTime
@@ -111,11 +120,10 @@ export default function Counter(props) {
     });
     stepPoints.length = 30;
     try {
-      const sessionToken = await AsyncStorage.getItem("sessionToken");
-      const userName = await AsyncStorage.getItem("userName");
-      token.current = sessionToken;
+      token.current = await AsyncStorage.getItem("sessionToken");
+      userName.current = await AsyncStorage.getItem("userName");
       console.log("token:", token.current);
-      await fetch("https://dev.stedi.me/rapidsteptest" + userName.current, {
+      await fetch("https://dev.stedi.me/rapidsteptest", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -139,8 +147,10 @@ export default function Counter(props) {
 
   const getResults = async () => {
     try {
+      console.log("UserName:" + userName.current);
+      console.log("Token before calling score:" + token.current);
       const scoreResponse = await fetch(
-        "https://dev.stedi.me/riskscore/rom19010@byui.edu",
+        "https://dev.stedi.me/riskscore/" + userName.current,
         {
           method: "GET",
           headers: {
